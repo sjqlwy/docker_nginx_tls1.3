@@ -7,7 +7,7 @@ RUN set -x \
 	&& addgroup --system --gid 101 nginx \
     && adduser --system --disabled-login --ingroup nginx --no-create-home --home /nonexistent --gecos "nginx user" --shell /bin/false --uid 101 nginx \
 	&& apt-get update \
-	&& apt-get install --no-install-recommends --no-install-suggests -y tzdata ca-certificates wget curl unzip git build-essential autoconf libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev brotli libatomic-ops-dev \
+	&& apt-get install --no-install-recommends --no-install-suggests -y tzdata ca-certificates wget curl unzip git build-essential autoconf libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev libatomic-ops-dev gettext-base \
 	&& echo "Asia/Shanghai" > /etc/timezone \
 	&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 	&& mkdir -p /usr/src \
@@ -96,14 +96,14 @@ RUN set -x \
 	&& make && make install \
 	&& rm -rf /usr/src \
 	&& rm -rf /tmp/* \
-	&& apt-get purge -y --auto-remove \
+	&& apt-get remove --purge --auto-remove -y ca-certificates \
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-WORKDIR /etc/nginx
+EXPOSE 80 443
 
 STOPSIGNAL SIGTERM
 
