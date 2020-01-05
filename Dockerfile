@@ -5,7 +5,9 @@ ENV NGINX_VERSION 1.17.7
 
 RUN set -x \
 	&& apt-get update \
-	&& apt-get install --no-install-recommends --no-install-suggests -y tzdata libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev libatomic-ops-dev gettext-base ca-certificates wget curl unzip git build-essential autoconf \
+	&& apt-get install --no-install-recommends --no-install-suggests -y \
+		tzdata libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev libatomic-ops-dev gettext-base \
+		ca-certificates wget curl unzip git build-essential autoconf \
 	&& echo "Asia/Shanghai" > /etc/timezone \
 	&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 	&& mkdir -p /usr/src \
@@ -97,9 +99,6 @@ RUN set -x \
 	&& apt-get remove --purge --auto-remove -y ca-certificates wget curl unzip git build-essential autoconf\
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
-
-RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-    && ln -sf /dev/stderr /var/log/nginx/error.log
 
 EXPOSE 80 443
 
