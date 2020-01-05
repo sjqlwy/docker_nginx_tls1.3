@@ -4,6 +4,9 @@ LABEL maintainer "JacyL4 - jacyl4@gmail.com"
 ENV NGINX_VERSION 1.17.7
 
 RUN set -x \
+	&& addgroup --system --gid 101 nginx \
+    && adduser --system --disabled-login --ingroup nginx --no-create-home --home /nonexistent \
+    	--gecos "nginx user" --shell /bin/false --uid 101 nginx \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y \
 		tzdata libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev libatomic-ops-dev gettext-base \
@@ -55,8 +58,8 @@ RUN set -x \
 		--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
 		--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
 		--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
-		--user=www-data \
-		--group=www-data \
+		--user=nginx \
+		--group=nginx \
 		--with-compat \
 		--with-file-aio \
 		--with-threads \
