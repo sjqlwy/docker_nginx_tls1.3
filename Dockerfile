@@ -4,10 +4,8 @@ LABEL maintainer "JacyL4 - jacyl4@gmail.com"
 ENV NGINX_VERSION 1.17.7
 
 RUN set -x \
-	&& addgroup --system --gid 101 nginx \
-    && adduser --system --disabled-login --ingroup nginx --no-create-home --home /nonexistent --gecos "nginx user" --shell /bin/false --uid 101 nginx \
 	&& apt-get update \
-	&& apt-get install --no-install-recommends --no-install-suggests -y tzdata ca-certificates wget curl unzip git build-essential autoconf libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev libatomic-ops-dev gettext-base \
+	&& apt-get install --no-install-recommends --no-install-suggests -y tzdata libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev libatomic-ops-dev gettext-base ca-certificates wget curl unzip git build-essential autoconf\
 	&& echo "Asia/Shanghai" > /etc/timezone \
 	&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 	&& mkdir -p /usr/src \
@@ -55,8 +53,8 @@ RUN set -x \
 		--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
 		--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
 		--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
-		--user=nginx \
-		--group=nginx \
+		--user=www-data \
+		--group=www-data \
 		--with-compat \
 		--with-file-aio \
 		--with-threads \
@@ -96,7 +94,7 @@ RUN set -x \
 	&& make && make install \
 	&& rm -rf /usr/src \
 	&& rm -rf /tmp/* \
-	&& apt-get remove --purge --auto-remove -y ca-certificates \
+	&& apt-get remove --purge --auto-remove -y ca-certificates wget curl unzip git build-essential autoconf\
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
