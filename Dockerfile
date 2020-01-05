@@ -35,7 +35,7 @@ RUN set -x \
 	&& curl https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1b.patch | patch -p1 \
 	&& curl https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-1.1.1b-chacha_draft.patch | patch -p1 \
 	&& cd /usr/src \
-	&& wget -N https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
+	&& wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
 	&& tar zxvf nginx-$NGINX_VERSION.tar.gz \
 	&& sed -i 's/CFLAGS="$CFLAGS -g"/#CFLAGS="$CFLAGS -g"/' /usr/src/nginx-$NGINX_VERSION/auto/cc/gcc \
 	&& cd /usr/src/nginx-$NGINX_VERSION \
