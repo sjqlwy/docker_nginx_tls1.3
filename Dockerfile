@@ -3,11 +3,17 @@ LABEL maintainer "JacyL4 - jacyl4@gmail.com"
 
 ENV NGINX_VERSION 1.17.7
 
+ENV OPENSSL_VERSION 1.1.1b
+
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN set -x \
 	&& apt-get update \
+	&& dpkg-reconfigure debconf \
 	&& apt-get install --no-install-recommends --no-install-suggests -y \
-		tzdata libtool libpcre3 libpcre3-dev zlib1g zlib1g-dev libatomic-ops-dev gettext-base \
-		ca-certificates wget curl unzip git build-essential autoconf \
+		apt-utils \
+	&& apt-get install --no-install-recommends --no-install-suggests -y dialog ca-certificates wget curl unzip git build-essential autoconf libtool \
+		tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
 	&& echo "Asia/Shanghai" > /etc/timezone \
 	&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 	&& mkdir -p /usr/src \
@@ -31,9 +37,9 @@ RUN set -x \
 	&& wget https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.gz \
 	&& tar -zxvf pcre-8.43.tar.gz \
 	&& cd /usr/src \
-	&& wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz \
-	&& tar zxvf openssl-1.1.1b.tar.gz \
-	&& cd /usr/src/openssl-1.1.1b \
+	&& wget https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz \
+	&& tar zxvf openssl-$OPENSSL_VERSION.tar.gz \
+	&& cd /usr/src/openssl-$OPENSSL_VERSION \
 	&& curl https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1b.patch | patch -p1 \
 	&& curl https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-1.1.1b-chacha_draft.patch | patch -p1 \
 	&& cd /usr/src \
@@ -88,15 +94,15 @@ RUN set -x \
 		--with-zlib=/usr/src/zlib \
 		--with-pcre=/usr/src/pcre-8.43 \
 		--with-pcre-jit \
-		--with-openssl=/usr/src/openssl-1.1.1b \
-		--with-openssl-opt='zlib enable-weak-ssl-ciphers enable-ec_nistp_64_gcc_128 -march=native -Wl,-flto' \
-		--with-cc-opt='-DTCP_FASTOPEN=23 -m64 -g -O3 -flto -ffast-math -march=native -fstack-protector-strong -fuse-ld=gold --param=ssp-buffer-size=4 -Wformat -Werror=format-security -fno-strict-aliasing -fPIC -Wdate-time -Wp,-D_FORTIFY_SOURCE=2' \
-		--with-ld-opt='-lrt -Wl,-z,relro -Wl,-z,now -fPIC -flto' \
+		--with-openssl=/usr/src/openssl-$OPENSSL_VERSION \
+		--with-openssl-opt='zlib enable-weak-ssl-ciphers enable-ec_nistp_64_gcc_128 -Wl,-flto' \
+		--with-cc-opt='-DTCP_FASTOPEN=23 -g -O2 -fdebug-prefix-map=/data/builder/debuild/nginx-1.15.12/debian/debuild-base/nginx-1.15.12=. -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC' \
+		--with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie' \
 		--add-module=/usr/src/ngx_brotli \
 	&& make && make install \
 	&& rm -rf /usr/src \
 	&& rm -rf /tmp/* \
-	&& apt-get remove --purge --auto-remove -y ca-certificates wget curl unzip git build-essential autoconf\
+	&& apt-get remove --purge --auto-remove -y apt-utils dialog ca-certificates wget curl unzip git build-essential autoconf libtool \
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
