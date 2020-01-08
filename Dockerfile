@@ -96,7 +96,7 @@ RUN set -x \
 		--with-pcre-jit \
 		--with-openssl=/usr/src/openssl-$OPENSSL_VERSION \
 		--with-openssl-opt='zlib enable-weak-ssl-ciphers enable-ec_nistp_64_gcc_128 -Wl,-flto' \
-		--with-cc-opt='-DTCP_FASTOPEN=23 -g -O2 -fdebug-prefix-map=/data/builder/debuild/nginx-1.15.12/debian/debuild-base/nginx-1.15.12=. -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC' \
+		--with-cc-opt='-DTCP_FASTOPEN=23 -g -O2 -pipe -Wall -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC' \
 		--with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie' \
 		--add-module=/usr/src/ngx_brotli \
 	&& make && make install \
