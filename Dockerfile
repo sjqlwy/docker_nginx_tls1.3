@@ -9,6 +9,7 @@ RUN set -x \
 	&& export DEBIAN_FRONTEND=noninteractive \
 	&& dpkg-reconfigure debconf \
 	&& apt-get update -y \
+	&& apt-get install --no-install-recommends --no-install-suggests -y apt-utils dialog \
 	&& apt-get install --no-install-recommends --no-install-suggests -y ca-certificates wget curl unzip git build-essential autoconf libtool \
 		tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
 	&& echo "Asia/Shanghai" > /etc/timezone \
@@ -96,7 +97,7 @@ RUN set -x \
 	&& make && make install \
 	&& rm -rf /usr/src \
 	&& rm -rf /tmp/* \
-	&& apt-get remove --purge --auto-remove -y ca-certificates wget curl unzip git build-essential autoconf libtool \
+	&& apt-get remove --purge --auto-remove -y apt-utils dialog ca-certificates wget curl unzip git build-essential autoconf libtool \
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
