@@ -1,18 +1,15 @@
 FROM debian:buster-slim
 LABEL maintainer "JacyL4 - jacyl4@gmail.com"
 
-ENV NGINX_VERSION 1.17.7
+ENV NGINX_VERSION 1.17.10
 
-ENV OPENSSL_VERSION 1.1.1b
-
-ENV DEBIAN_FRONTEND noninteractive
+ENV OPENSSL_VERSION 1.1.1g
 
 RUN set -x \
-	&& apt-get update \
+	&& export DEBIAN_FRONTEND=noninteractive \
 	&& dpkg-reconfigure debconf \
-	&& apt-get install --no-install-recommends --no-install-suggests -y \
-		apt-utils \
-	&& apt-get install --no-install-recommends --no-install-suggests -y dialog ca-certificates wget curl unzip git build-essential autoconf libtool \
+	&& apt-get update -y \
+	&& apt-get install --no-install-recommends --no-install-suggests -y ca-certificates wget curl unzip git build-essential autoconf libtool \
 		tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
 	&& echo "Asia/Shanghai" > /etc/timezone \
 	&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
@@ -39,15 +36,13 @@ RUN set -x \
 	&& cd /usr/src \
 	&& wget https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz \
 	&& tar zxvf openssl-$OPENSSL_VERSION.tar.gz \
-	&& cd /usr/src/openssl-$OPENSSL_VERSION \
-	&& curl https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1b.patch | patch -p1 \
-	&& curl https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-1.1.1b-chacha_draft.patch | patch -p1 \
 	&& cd /usr/src \
 	&& wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
 	&& tar zxvf nginx-$NGINX_VERSION.tar.gz \
 	&& sed -i 's/CFLAGS="$CFLAGS -g"/#CFLAGS="$CFLAGS -g"/' /usr/src/nginx-$NGINX_VERSION/auto/cc/gcc \
 	&& cd /usr/src/nginx-$NGINX_VERSION \
 	&& curl https://raw.githubusercontent.com/kn007/patch/master/nginx.patch | patch -p1 \
+	&& curl https://raw.githubusercontent.com/kn007/patch/master/use_openssl_md5_sha1.patch | patch -p1 \
 	&& ./configure \
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
@@ -84,7 +79,6 @@ RUN set -x \
 		--with-http_random_index_module \
 		--with-http_secure_link_module \
 		--with-http_degradation_module \
-		--with-http_spdy_module \
 		--with-http_v2_module \
 		--with-http_v2_hpack_enc \
 		--with-stream \
@@ -102,7 +96,7 @@ RUN set -x \
 	&& make && make install \
 	&& rm -rf /usr/src \
 	&& rm -rf /tmp/* \
-	&& apt-get remove --purge --auto-remove -y apt-utils dialog ca-certificates wget curl unzip git build-essential autoconf libtool \
+	&& apt-get remove --purge --auto-remove -y ca-certificates wget curl unzip git build-essential autoconf libtool \
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
