@@ -103,7 +103,8 @@ RUN set -x \
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
-EXPOSE 80 443
+EXPOSE 80 
+EXPOSE 443
 
 STOPSIGNAL SIGTERM
 
