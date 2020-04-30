@@ -30,8 +30,8 @@ RUN set -x \
 	&& cd /usr/src/ngx_brotli \
 	&& git submodule update --init \
 	&& cd /usr/src \
-	&& wget https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.gz \
-	&& tar -zxvf pcre-8.43.tar.gz \
+	&& wget https://ftp.pcre.org/pub/pcre/pcre-8.44.tar.gz \
+	&& tar -zxvf pcre-8.44.tar.gz \
 	&& cd /usr/src \
 	&& wget https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz \
 	&& tar zxvf openssl-$OPENSSL_VERSION.tar.gz \
@@ -85,7 +85,7 @@ RUN set -x \
 		--with-stream_ssl_module \
 		--with-stream_ssl_preread_module \
 		--with-zlib=/usr/src/zlib \
-		--with-pcre=/usr/src/pcre-8.43 \
+		--with-pcre=/usr/src/pcre-8.44 \
 		--with-pcre-jit \
 		--with-openssl=/usr/src/openssl-$OPENSSL_VERSION \
 		--with-openssl-opt='zlib enable-weak-ssl-ciphers enable-ec_nistp_64_gcc_128 -Wl,-flto' \
@@ -96,10 +96,10 @@ RUN set -x \
 	&& rm -rf /usr/src \
 	&& rm -rf /tmp/* \
 	&& apt-get remove --purge --auto-remove -y autoconf autotools-dev binutils binutils-common binutils-x86-64-linux-gnu build-essential bzip2 ca-certificates cpp cpp-8 curl dpkg-dev file g++ g++-8 gcc gcc-8 git git-man libasan5 \
-		  libatomic1 libbinutils libc-dev-bin libc6-dev libcc1-0 libcurl3-gnutls libcurl4 libdpkg-perl liberror-perl libgcc-8-dev libgdbm-compat4 libgdbm6 libgomp1 libgssapi-krb5-2 \
+		  libatomic1 libbinutils libcc1-0 libcurl3-gnutls libcurl4 libdpkg-perl liberror-perl libgcc-8-dev libgdbm-compat4 libgdbm6 libgomp1 libgssapi-krb5-2 \
 		  libisl19 libitm1 libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libldap-2.4-2 libldap-common liblsan0 libmagic-mgc libmagic1 libmpc3 libmpfr6 libmpx2 libnghttp2-14 libpcre2-8-0 \
-		  libperl5.28 libpsl5 libquadmath0 librtmp1 libsasl2-2 libsasl2-modules-db libsigsegv2 libssh2-1 libstdc++-8-dev libtool libtsan0 libubsan1 linux-libc-dev m4 make openssl patch \
-		  perl perl-modules-5.28 unzip wget xz-utils \
+		  libperl5.28 libpsl5 libquadmath0 librtmp1 libsasl2-2 libsasl2-modules-db libsigsegv2 libssh2-1 libstdc++-8-dev libtool libtsan0 libubsan1 m4 make openssl patch \
+		  perl perl-modules-5.28 unzip wget \
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
