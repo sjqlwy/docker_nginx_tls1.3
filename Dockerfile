@@ -8,10 +8,8 @@ ENV OPENSSL_VERSION 1.1.1g
 RUN set -x \
 	&& export DEBIAN_FRONTEND=noninteractive \
 	&& dpkg-reconfigure debconf \
-	&& apt-get update -y \
-	&& apt-get install --no-install-recommends --no-install-suggests -y apt-utils dialog \
-	&& apt-get install --no-install-recommends --no-install-suggests -y ca-certificates wget curl unzip git build-essential autoconf libtool \
-		tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
+	&& apt-get update \
+	&& apt-get install --no-install-recommends --no-install-suggests -y ca-certificates wget curl unzip git build-essential autoconf libtool tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
 	&& echo "Asia/Shanghai" > /etc/timezone \
 	&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 	&& mkdir -p /usr/src \
@@ -97,7 +95,11 @@ RUN set -x \
 	&& make && make install \
 	&& rm -rf /usr/src \
 	&& rm -rf /tmp/* \
-	&& apt-get remove --purge --auto-remove -y apt-utils dialog ca-certificates wget curl unzip git build-essential autoconf libtool \
+	&& apt-get remove --purge --auto-remove -y autoconf autotools-dev binutils binutils-common binutils-x86-64-linux-gnu build-essential bzip2 ca-certificates cpp cpp-8 curl dpkg-dev file g++ g++-8 gcc gcc-8 git git-man libasan5 \
+		  libatomic1 libbinutils libc-dev-bin libc6-dev libcc1-0 libcurl3-gnutls libcurl4 libdpkg-perl liberror-perl libgcc-8-dev libgdbm-compat4 libgdbm6 libgomp1 libgssapi-krb5-2 \
+		  libisl19 libitm1 libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libldap-2.4-2 libldap-common liblsan0 libmagic-mgc libmagic1 libmpc3 libmpfr6 libmpx2 libnghttp2-14 libpcre2-8-0 \
+		  libperl5.28 libpsl5 libquadmath0 librtmp1 libsasl2-2 libsasl2-modules-db libsigsegv2 libssh2-1 libstdc++-8-dev libtool libtsan0 libubsan1 linux-libc-dev m4 make openssl patch \
+		  perl perl-modules-5.28 unzip wget xz-utils \
 	&& apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
