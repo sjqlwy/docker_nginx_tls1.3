@@ -7,7 +7,6 @@ ENV OPENSSL_VERSION 1.1.1g
 
 RUN set -x \
 	&& export DEBIAN_FRONTEND=noninteractive \
-	&& dpkg-reconfigure debconf \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y ca-certificates wget curl unzip git build-essential autoconf libtool tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
 	&& echo "Asia/Shanghai" > /etc/timezone \
