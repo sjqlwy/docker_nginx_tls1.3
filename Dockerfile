@@ -6,7 +6,6 @@ ENV NGINX_VERSION 1.17.10
 ENV OPENSSL_VERSION 1.1.1g
 
 RUN set -x \
-	&& echo 3 > /proc/sys/net/ipv4/tcp_fastopen \
 	&& export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y ca-certificates wget curl unzip git build-essential autoconf libtool tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
