@@ -6,60 +6,7 @@ ENV NGINX_VERSION 1.17.10
 ENV OPENSSL_VERSION 1.1.1g
 
 RUN set -x \
-	&& echo "fs.file-max = 1000000" > /etc/sysctl.conf \
-	&& echo "fs.inotify.max_user_instances = 1000000" >> /etc/sysctl.conf \
-	&& echo "fs.inotify.max_user_watches = 1000000" >> /etc/sysctl.conf \
-	&& echo "net.core.netdev_max_backlog = 32768" >> /etc/sysctl.conf \
-	&& echo "net.core.optmem_max = 8388608" >> /etc/sysctl.conf \
-	&& echo "net.core.rmem_max = 8388608" >> /etc/sysctl.conf \
-	&& echo "net.core.rmem_default = 8388608" >> /etc/sysctl.conf \
-	&& echo "net.core.wmem_max = 8388608" >> /etc/sysctl.conf \
-	&& echo "net.core.wmem_default = 8388608" >> /etc/sysctl.conf \
-	&& echo "net.core.somaxconn = 32768" >> /etc/sysctl.conf \
-	&& echo "net.netfilter.nf_conntrack_checksum = 0" >> /etc/sysctl.conf \
-	&& echo "net.netfilter.nf_conntrack_max = 1000000" >> /etc/sysctl.conf \
-	&& echo "net.nf_conntrack_max = 1000000" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.icmp_echo_ignore_broadcasts = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.icmp_ignore_bogus_error_responses = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.all.arp_ignore = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.default.arp_ignore = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.all.rp_filter = 2" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.default.rp_filter = 2" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.all.send_redirects = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.default.send_redirects = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.all.accept_redirects = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.default.accept_redirects = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.all.secure_redirects = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.default.secure_redirects = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.all.accept_source_route = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.conf.default.accept_source_route = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.ip_local_port_range = 1025 65535" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_window_scaling = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_fastopen = 3" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_timestamps = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_tw_reuse = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_syncookies = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_fin_timeout = 15" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_orphan_retries = 2" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_syn_retries = 2" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_synack_retries = 2" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_sack = 1" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_max_syn_backlog = 32768" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_max_tw_buckets = 6000" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_max_orphans = 32768" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_rmem = 4096 87380 8388608" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_wmem = 4096 87380 8388608" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_keepalive_time = 1800" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_keepalive_intvl = 15" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_keepalive_probes = 3" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_rfc1337 = 1" >> /etc/sysctl.conf \
-	&& echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf \
-	&& echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf \
-	&& sysctl -p \
+	&& echo 3 > /proc/sys/net/ipv4/tcp_fastopen \
 	&& export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y ca-certificates wget curl unzip git build-essential autoconf libtool tzdata libpcre3-dev zlib1g-dev libatomic-ops-dev \
